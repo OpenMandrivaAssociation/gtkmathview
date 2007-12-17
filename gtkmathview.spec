@@ -15,7 +15,6 @@ Group:      Networking/WWW
 Url:            http://www.cs.unibo.it/helm/mml-widget/
 Source:     http://helm.cs.unibo.it/mml-widget/sources/%{name}-%{version}.tar.bz2
 Source1:         gtkmathview.html.tar.bz2
-BuildRoot:  %{_tmppath}/%{name}-%{version}-root
 #BuildRequires:   t1lib-devel >= 1.3
 BuildRequires:    gmetadom-devel >= 0.1.8 autoconf2.5
 BuildRequires:    libxml2-devel >= 2.2.0
