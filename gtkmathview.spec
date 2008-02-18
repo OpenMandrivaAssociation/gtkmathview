@@ -6,7 +6,7 @@
 %define libname  %mklibname %name %major
 %define develname %mklibname -d %name
 
-Summary:    GtkMathView is a C++ rendering engine for MathML documents
+Summary:    C++ rendering engine for MathML documents
 Name:       %name
 Version:    %version
 Release:    %mkrel %release
