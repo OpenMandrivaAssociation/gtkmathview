@@ -15,6 +15,10 @@ Group:      Networking/WWW
 Url:            http://www.cs.unibo.it/helm/mml-widget/
 Source:     http://helm.cs.unibo.it/mml-widget/sources/%{name}-%{version}.tar.bz2
 Source1:         gtkmathview.html.tar.bz2
+Patch0: gtkmathview-0.8.0-cond-t1.patch
+Patch1: gtkmathview-0.8.0-gcc43.patch
+Patch2: gtkmathview-0.8.0-gcc44.patch
+Patch3: gtkmathview-0.8.0-fix-link.patch
 BuildRoot:  %{_tmppath}/%{name}-%{version}-root
 #BuildRequires:   t1lib-devel >= 1.3
 BuildRequires:    gmetadom-devel >= 0.1.8 autoconf2.5
@@ -54,8 +58,15 @@ GtkMathView is a GTK Widget for rendering MathML documents.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
+%patch2 -p0
+%patch3 -p0
+# AM_BINRELOC missing, just ignore
+echo 'AC_DEFUN([AM_BINRELOC], [])' > acinclude.m4
 
 %build
+autoreconf -fi
 #configure2_5x --with-t1lib=no  --with-libxml2
 %configure2_5x --with-libxml2
 
