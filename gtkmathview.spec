@@ -19,20 +19,14 @@ Patch0: gtkmathview-0.8.0-cond-t1.patch
 Patch1: gtkmathview-0.8.0-gcc43.patch
 Patch2: gtkmathview-0.8.0-gcc44.patch
 Patch3: gtkmathview-0.8.0-fix-link.patch
+Patch4: gtkmathview-0.8.0-no-static.patch
 BuildRoot:  %{_tmppath}/%{name}-%{version}-root
-#BuildRequires:   t1lib-devel >= 1.3
-BuildRequires:    gmetadom-devel >= 0.1.8 autoconf2.5
+BuildRequires:    t1lib-devel >= 1.3
+BuildRequires:    gmetadom-devel >= 0.1.8
 BuildRequires:    libxml2-devel >= 2.2.0
-BuildRequires:    libcairo-static-devel
-BuildRequires:    freetype2-static-devel
-BuildRequires:    X11-static-devel
 BuildRequires:    gtk+2-devel
 BuildRequires:    popt-devel
 BuildRequires:    libxslt-proc
-BuildRequires:    t1lib-static-devel
-Requires:     gtk2 >= 2.4.0 t1lib >= 1.3 %libname = %version
-Requires:         libxml2 >= 2.5.0
-Requires:         %{_lib}gmetadom_gdome_cpp_smart0 >= 0.1.8
 Requires:         fonts-ttf-latex
 
 %description
@@ -51,7 +45,7 @@ Group:    Development/C++
 Requires: %libname = %version glib-devel >= 1.2.10 libxml2-devel >= 2.4.26
 Provides: lib%name-devel = %version-%release
 Provides: %name-devel = %version-%release
-Obsoletes: %{libname}-devel
+Obsoletes: %{_lib}gtkmathview0-devel < %version-%release
 
 %description -n %develname
 GtkMathView is a GTK Widget for rendering MathML documents.
@@ -62,15 +56,14 @@ GtkMathView is a GTK Widget for rendering MathML documents.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
+%patch4 -p1
 # AM_BINRELOC missing, just ignore
 echo 'AC_DEFUN([AM_BINRELOC], [])' > acinclude.m4
 
 %build
 autoreconf -fi
-#configure2_5x --with-t1lib=no  --with-libxml2
-%configure2_5x --with-libxml2
-
-%make -j1
+%configure2_5x --disable-static
+%make
 
 ##Add updated html reference manual##
 mkdir DATA.TMP
@@ -105,7 +98,8 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files -n %libname
 %defattr(-, root, root)
-%_libdir/lib*.so.*
+%_libdir/lib*.so.%{major}
+%_libdir/lib*.so.%{major}.*
 
 %files -n %develname
 %defattr(-,root,root)
