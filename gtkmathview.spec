@@ -1,6 +1,6 @@
 %define name       gtkmathview
 %define version    0.8.0
-%define release    3
+%define release    4
 
 %define major 0
 %define libname  %mklibname %name %major
