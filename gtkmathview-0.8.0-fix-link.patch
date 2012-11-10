@@ -1,0 +1,58 @@
+--- src/backend/gtk/Makefile.am.link	2010-02-17 13:22:39.000000000 +0100
++++ src/backend/gtk/Makefile.am	2010-02-17 13:23:44.000000000 +0100
+@@ -76,6 +76,12 @@
+ #   Gtk_XftGlyphArea.hh
+ 
+ libmathview_backend_gtk_la_LIBADD = \
++  $(top_srcdir)/src/common/libcommon.la \
++  $(top_srcdir)/src/backend/common/libbackend_common.la \
++  $(top_srcdir)/src/engine/boxml/libboxml.la \
++  $(top_srcdir)/src/engine/mathml/libmathml.la \
++  $(top_srcdir)/src/engine/common/libengine_common.la \
++  $(top_srcdir)/src/frontend/common/libfrontend_common.la \
+   $(PANGOX_LIBS) \
+   $(GTK_LIBS) \
+   $(T1_LIBS) \
+--- src/backend/ps/Makefile.am.link	2010-02-17 13:24:33.000000000 +0100
++++ src/backend/ps/Makefile.am	2010-02-17 13:25:31.000000000 +0100
+@@ -35,6 +35,13 @@
+ 
+ libmathview_backend_ps_la_CPPFLAGS = -DGMV_BackEnd_DLL
+ libmathview_backend_ps_la_LDFLAGS = -version-info @MATHVIEW_VERSION_INFO@
++libmathview_backend_ps_la_LIBADD = \
++  $(top_srcdir)/src/common/libcommon.la \
++  $(top_srcdir)/src/backend/common/libbackend_common.la \
++  $(top_srcdir)/src/engine/boxml/libboxml.la \
++  $(top_srcdir)/src/engine/mathml/libmathml.la \
++  $(top_srcdir)/src/engine/common/libengine_common.la \
++  $(top_srcdir)/src/frontend/common/libfrontend_common.la
+ 
+ libmathview_backend_ps_la_SOURCES = \
+   PS_AreaFactory.hh \
+--- src/backend/svg/Makefile.am.link	2010-02-17 13:26:40.000000000 +0100
++++ src/backend/svg/Makefile.am	2010-02-17 13:27:22.000000000 +0100
+@@ -30,6 +30,13 @@
+ 
+ libmathview_backend_svg_la_CPPFLAGS = -DGMV_BackEnd_DLL
+ libmathview_backend_svg_la_LDFLAGS = -version-info @MATHVIEW_VERSION_INFO@
++libmathview_backend_svg_la_LIBADD = \
++  $(top_srcdir)/src/common/libcommon.la \
++  $(top_srcdir)/src/backend/common/libbackend_common.la \
++  $(top_srcdir)/src/engine/boxml/libboxml.la \
++  $(top_srcdir)/src/engine/mathml/libmathml.la \
++  $(top_srcdir)/src/engine/common/libengine_common.la \
++  $(top_srcdir)/src/frontend/common/libfrontend_common.la
+ 
+ libmathview_backend_svg_la_SOURCES = \
+   SVG_AreaFactory.hh \
+--- src/Makefile.am.link	2010-02-17 13:30:23.000000000 +0100
++++ src/Makefile.am	2010-02-17 13:30:46.000000000 +0100
+@@ -7,7 +7,7 @@
+ MAYBE_GTK_SUBDIRS = $(NULL)
+ endif
+ 
+-SUBDIRS = common engine backend frontend . view $(MAYBE_GTK_SUBDIRS)
++SUBDIRS = common engine frontend backend . view $(MAYBE_GTK_SUBDIRS)
+ 
+ if COND_BOXML
+ MAYBE_BOXML_LIBADD = \
