@@ -1,0 +1,398 @@
+diff -up gtkmathview-0.8.0/mathmlsvg/SMS.hh.gcc7 gtkmathview-0.8.0/mathmlsvg/SMS.hh
+--- gtkmathview-0.8.0/mathmlsvg/SMS.hh.gcc7	2007-08-17 12:02:46.000000000 +0200
++++ gtkmathview-0.8.0/mathmlsvg/SMS.hh	2017-10-02 22:39:30.687544376 +0200
+@@ -108,10 +108,10 @@ private:
+   float viewBoxHeight;
+   float dpi;
+ 
+-  typedef HASH_MAP_NS::hash_map<String,SmartPtr<Fragment>,StringHash,StringEq> IdFragmentMap;
++  typedef HASH_MAP_NS::unordered_map<String,SmartPtr<Fragment>,StringHash,StringEq> IdFragmentMap;
+   IdFragmentMap idFragmentMap;
+ 
+-  typedef HASH_MAP_NS::hash_map<String,Handler,StringHash,StringEq> FunMap;
++  typedef HASH_MAP_NS::unordered_map<String,Handler,StringHash,StringEq> FunMap;
+   FunMap funMap;
+ };
+ 
+diff -up gtkmathview-0.8.0/mathmlsvg/SVG_EvalRenderingContext.hh.gcc7 gtkmathview-0.8.0/mathmlsvg/SVG_EvalRenderingContext.hh
+--- gtkmathview-0.8.0/mathmlsvg/SVG_EvalRenderingContext.hh.gcc7	2007-08-17 12:02:46.000000000 +0200
++++ gtkmathview-0.8.0/mathmlsvg/SVG_EvalRenderingContext.hh	2017-10-02 22:38:59.899773385 +0200
+@@ -40,7 +40,7 @@ public:
+ 
+ private:
+   SmartPtr<MathView> view;
+-  typedef HASH_MAP_NS::hash_map<String,SmartPtr<class Location>,StringHash,StringEq> IdMap;
++  typedef HASH_MAP_NS::unordered_map<String,SmartPtr<class Location>,StringHash,StringEq> IdMap;
+   IdMap idMap;
+ };
+ 
+diff -up gtkmathview-0.8.0/src/backend/common/ComputerModernFamily.cc.gcc7 gtkmathview-0.8.0/src/backend/common/ComputerModernFamily.cc
+--- gtkmathview-0.8.0/src/backend/common/ComputerModernFamily.cc.gcc7	2007-08-17 12:02:44.000000000 +0200
++++ gtkmathview-0.8.0/src/backend/common/ComputerModernFamily.cc	2017-10-02 22:24:36.374206342 +0200
+@@ -21,6 +21,7 @@
+ #include <cassert>
+ #include <vector>
+ #include <sstream>
++#include <algorithm>
+ 
+ #include "Configuration.hh"
+ #include "ComputerModernFamily.hh"
+diff -up gtkmathview-0.8.0/src/backend/common/MathGraphicDevice.cc.gcc7 gtkmathview-0.8.0/src/backend/common/MathGraphicDevice.cc
+--- gtkmathview-0.8.0/src/backend/common/MathGraphicDevice.cc.gcc7	2007-10-15 09:04:19.000000000 +0200
++++ gtkmathview-0.8.0/src/backend/common/MathGraphicDevice.cc	2017-10-02 22:30:23.349619121 +0200
+@@ -68,8 +68,8 @@ MathGraphicDevice::dummy(const Formattin
+ 
+ #include "CachedShapedString.hh"
+ #include "HashMap.hh"
+-typedef HASH_MAP_NS::hash_map<CachedShapedStringKey, AreaRef, CachedShapedStringKeyHash> ShapedStringCache;
+-typedef HASH_MAP_NS::hash_map<CachedShapedStretchyStringKey, AreaRef, CachedShapedStringKeyHash> ShapedStretchyStringCache;
++typedef HASH_MAP_NS::unordered_map<CachedShapedStringKey, AreaRef, CachedShapedStringKeyHash> ShapedStringCache;
++typedef HASH_MAP_NS::unordered_map<CachedShapedStretchyStringKey, AreaRef, CachedShapedStringKeyHash> ShapedStretchyStringCache;
+ 
+ static ShapedStretchyStringCache stretchyStringCache;
+ static ShapedStringCache stringCache;
+diff -up gtkmathview-0.8.0/src/backend/common/StandardSymbolsShaper.cc.gcc7 gtkmathview-0.8.0/src/backend/common/StandardSymbolsShaper.cc
+--- gtkmathview-0.8.0/src/backend/common/StandardSymbolsShaper.cc.gcc7	2017-10-02 22:34:13.845902233 +0200
++++ gtkmathview-0.8.0/src/backend/common/StandardSymbolsShaper.cc	2017-10-02 22:34:31.962767345 +0200
+@@ -29,7 +29,7 @@
+ #include "ShapingContext.hh"
+ 
+ struct GlyphMap {
+-  Char8 index;
++  UChar8 index;
+   Char16 ch;
+ };
+ 
+diff -up gtkmathview-0.8.0/src/backend/common/StandardSymbolsShaper.hh.gcc7 gtkmathview-0.8.0/src/backend/common/StandardSymbolsShaper.hh
+--- gtkmathview-0.8.0/src/backend/common/StandardSymbolsShaper.hh.gcc7	2007-08-17 12:02:44.000000000 +0200
++++ gtkmathview-0.8.0/src/backend/common/StandardSymbolsShaper.hh	2017-10-02 22:35:09.652486755 +0200
+@@ -32,20 +32,20 @@ public:
+   struct HStretchyChar
+   {
+     Char16 ch;
+-    Char8 normal;
+-    Char8 left;
+-    Char8 glue;
+-    Char8 right;
++    UChar8 normal;
++    UChar8 left;
++    UChar8 glue;
++    UChar8 right;
+   };
+   
+   struct VStretchyChar
+   {
+     Char16 ch;
+-    Char8 normal;
+-    Char8 top;
+-    Char8 glue;
+-    Char8 middle;
+-    Char8 bottom;
++    UChar8 normal;
++    UChar8 top;
++    UChar8 glue;
++    UChar8 middle;
++    UChar8 bottom;
+   };
+ 
+ protected:
+diff -up gtkmathview-0.8.0/src/backend/common/t1lib_T1FontManager.hh.gcc7 gtkmathview-0.8.0/src/backend/common/t1lib_T1FontManager.hh
+--- gtkmathview-0.8.0/src/backend/common/t1lib_T1FontManager.hh.gcc7	2007-08-17 12:02:44.000000000 +0200
++++ gtkmathview-0.8.0/src/backend/common/t1lib_T1FontManager.hh	2017-10-02 22:36:37.040836307 +0200
+@@ -64,7 +64,7 @@ private:
+     { return StringHash()(key.name) ^ key.size.getValue(); }
+   };
+ 
+-  typedef HASH_MAP_NS::hash_map<CachedT1FontKey,SmartPtr<class t1lib_T1Font>,CachedT1FontHash> T1FontCache;
++  typedef HASH_MAP_NS::unordered_map<CachedT1FontKey,SmartPtr<class t1lib_T1Font>,CachedT1FontHash> T1FontCache;
+   mutable T1FontCache fontCache;
+ };
+ 
+diff -up gtkmathview-0.8.0/src/backend/common/TFMFontManager.hh.gcc7 gtkmathview-0.8.0/src/backend/common/TFMFontManager.hh
+--- gtkmathview-0.8.0/src/backend/common/TFMFontManager.hh.gcc7	2007-08-17 12:02:44.000000000 +0200
++++ gtkmathview-0.8.0/src/backend/common/TFMFontManager.hh	2017-10-02 22:35:52.378168716 +0200
+@@ -60,7 +60,7 @@ private:
+     { return StringHash()(key.name) ^ key.size.getValue(); }
+   };
+ 
+-  typedef HASH_MAP_NS::hash_map<CachedFontKey,SmartPtr<class TFMFont>,CachedFontHash> FontCache;
++  typedef HASH_MAP_NS::unordered_map<CachedFontKey,SmartPtr<class TFMFont>,CachedFontHash> FontCache;
+   mutable FontCache fontCache;
+   SmartPtr<class TFMManager> tfmManager;
+ };
+diff -up gtkmathview-0.8.0/src/backend/common/tfm/TFM.hh.gcc7 gtkmathview-0.8.0/src/backend/common/tfm/TFM.hh
+--- gtkmathview-0.8.0/src/backend/common/tfm/TFM.hh.gcc7	2007-08-17 12:02:42.000000000 +0200
++++ gtkmathview-0.8.0/src/backend/common/tfm/TFM.hh	2017-10-02 22:21:59.028380734 +0200
+@@ -37,7 +37,7 @@ public:
+     unsigned char face;
+     const char* codingScheme;
+     int designSize;
+-    int checksum;
++    unsigned int checksum;
+     unsigned int nDimensions;
+     unsigned int nCharacters;
+   };
+@@ -52,7 +52,7 @@ public:
+   struct Kerning
+   {
+     UChar8 index;
+-    int value;
++    unsigned int value;
+   };
+ 
+   struct Ligature
+@@ -67,7 +67,7 @@ public:
+     UChar8 index;
+     int width;
+     int height;
+-    int depth;
++    unsigned int depth;
+     int italicCorrection;
+     unsigned char nKernings;
+     const Kerning* kerning;
+diff -up gtkmathview-0.8.0/src/backend/common/tfm/TFMManager.hh.gcc7 gtkmathview-0.8.0/src/backend/common/tfm/TFMManager.hh
+--- gtkmathview-0.8.0/src/backend/common/tfm/TFMManager.hh.gcc7	2007-08-17 12:02:42.000000000 +0200
++++ gtkmathview-0.8.0/src/backend/common/tfm/TFMManager.hh	2017-10-02 22:22:45.102036774 +0200
+@@ -43,7 +43,7 @@ protected:
+   typedef void (*TFMTables)(TFM::Font*&, TFM::Dimension*&, TFM::Character*&);
+ 
+ private:
+-  typedef HASH_MAP_NS::hash_map<String,SmartPtr<class TFM>,StringHash> TFMCache;
++  typedef HASH_MAP_NS::unordered_map<String,SmartPtr<class TFM>,StringHash> TFMCache;
+   mutable TFMCache tfmCache;  
+ 
+   struct TFMTable
+diff -up gtkmathview-0.8.0/src/common/Configuration.cc.gcc7 gtkmathview-0.8.0/src/common/Configuration.cc
+--- gtkmathview-0.8.0/src/common/Configuration.cc.gcc7	2007-08-17 12:02:45.000000000 +0200
++++ gtkmathview-0.8.0/src/common/Configuration.cc	2017-10-02 21:59:29.676581962 +0200
+@@ -22,6 +22,8 @@
+ #include "Configuration.hh"
+ #include "TemplateStringParsers.hh"
+ 
++#include <algorithm>
++
+ std::vector<String> Configuration::configurationPaths;
+ 
+ Configuration::Configuration()
+diff -up gtkmathview-0.8.0/src/common/Configuration.hh.gcc7 gtkmathview-0.8.0/src/common/Configuration.hh
+--- gtkmathview-0.8.0/src/common/Configuration.hh.gcc7	2007-08-17 12:02:45.000000000 +0200
++++ gtkmathview-0.8.0/src/common/Configuration.hh	2017-10-02 21:57:19.119583125 +0200
+@@ -20,6 +20,7 @@
+ #define __Configuration_hh__
+ 
+ #include <vector>
++#include <unordered_map>
+ 
+ #include "defs.h"
+ #include "String.hh"
+@@ -79,7 +80,7 @@
+ 
+ private:
+   static std::vector<String> configurationPaths;
+-  typedef HASH_MAP_NS::hash_map<String, SmartPtr<Entry>, StringHash, StringEq> Map;
++  typedef std::unordered_map<String, SmartPtr<Entry>, StringHash, StringEq> Map;
+   Map map;
+ };
+ 
+diff -up gtkmathview-0.8.0/src/common/ScopedHashMap.hh.gcc7 gtkmathview-0.8.0/src/common/ScopedHashMap.hh
+--- gtkmathview-0.8.0/src/common/ScopedHashMap.hh.gcc7	2007-08-17 12:02:45.000000000 +0200
++++ gtkmathview-0.8.0/src/common/ScopedHashMap.hh	2017-10-02 21:57:24.893538819 +0200
+@@ -127,7 +127,7 @@ private:
+     Entry* first;
+   };
+ 
+-  typedef HASH_MAP_NS::hash_map<const K,Bucket*,HashFcn,EqualKey,Alloc> Map;
++  typedef HASH_MAP_NS::unordered_map<const K,Bucket*,HashFcn,EqualKey,Alloc> Map;
+ 
+   Env* env;
+   Map map;
+diff -up gtkmathview-0.8.0/src/common/token.cc.gcc7 gtkmathview-0.8.0/src/common/token.cc
+--- gtkmathview-0.8.0/src/common/token.cc.gcc7	2007-08-17 12:02:45.000000000 +0200
++++ gtkmathview-0.8.0/src/common/token.cc	2017-10-02 21:58:14.935154941 +0200
+@@ -36,7 +36,7 @@ static Entry token[] =
+     { T__NOTVALID, 0 }
+   };
+ 
+-typedef HASH_MAP_NS::hash_map<String,TokenId,StringHash,StringEq> Map;
++typedef HASH_MAP_NS::unordered_map<String,TokenId,StringHash,StringEq> Map;
+ static Map map;
+ 
+ TokenId
+diff -up gtkmathview-0.8.0/src/engine/common/View.cc.gcc7 gtkmathview-0.8.0/src/engine/common/View.cc
+--- gtkmathview-0.8.0/src/engine/common/View.cc.gcc7	2007-08-17 12:02:39.000000000 +0200
++++ gtkmathview-0.8.0/src/engine/common/View.cc	2017-10-02 22:01:14.589778425 +0200
+@@ -291,7 +291,7 @@ View::getCharAt(const scaled& x, const s
+ 	  }
+     }
+ 
+-  return false;
++  return NULL;
+ }
+ 
+ bool
+diff -up gtkmathview-0.8.0/src/engine/mathml/MathMLOperatorDictionary.hh.gcc7 gtkmathview-0.8.0/src/engine/mathml/MathMLOperatorDictionary.hh
+--- gtkmathview-0.8.0/src/engine/mathml/MathMLOperatorDictionary.hh.gcc7	2007-08-17 12:02:38.000000000 +0200
++++ gtkmathview-0.8.0/src/engine/mathml/MathMLOperatorDictionary.hh	2017-10-02 22:00:19.535199985 +0200
+@@ -51,7 +51,7 @@ private:
+     SmartPtr<class AttributeSet> postfix;
+   };
+ 
+-  typedef HASH_MAP_NS::hash_map<String,FormDefaults,StringHash,StringEq> Dictionary;
++  typedef HASH_MAP_NS::unordered_map<String,FormDefaults,StringHash,StringEq> Dictionary;
+   Dictionary items;
+ };
+ 
+diff -up gtkmathview-0.8.0/src/frontend/common/TemplateBuilder.hh.gcc7 gtkmathview-0.8.0/src/frontend/common/TemplateBuilder.hh
+--- gtkmathview-0.8.0/src/frontend/common/TemplateBuilder.hh.gcc7	2017-10-02 21:52:06.672955637 +0200
++++ gtkmathview-0.8.0/src/frontend/common/TemplateBuilder.hh	2017-10-02 22:10:05.978721077 +0200
+@@ -1470,16 +1470,16 @@ public:
+ 
+ private:
+ #if ENABLE_BUILDER_CACHE
+-  typedef HASH_MAP_NS::hash_map<String, SmartPtr<MathMLTextNode>, StringHash, StringEq> MathMLTextNodeCache;
++  typedef HASH_MAP_NS::unordered_map<String, SmartPtr<MathMLTextNode>, StringHash, StringEq> MathMLTextNodeCache;
+   mutable MathMLTextNodeCache mathmlTextNodeCache;
+ #endif // ENABLE_BUILDER_CACHE
+   typedef SmartPtr<class MathMLElement> (TemplateBuilder::* MathMLUpdateMethod)(const typename Model::Element&) const;
+-  typedef HASH_MAP_NS::hash_map<String, MathMLUpdateMethod, StringHash, StringEq> MathMLBuilderMap;
++  typedef HASH_MAP_NS::unordered_map<String, MathMLUpdateMethod, StringHash, StringEq> MathMLBuilderMap;
+   static MathMLBuilderMap mathmlMap;
+   static bool mathmlMapInitialized;
+ #if GMV_ENABLE_BOXML
+   typedef SmartPtr<class BoxMLElement> (TemplateBuilder::* BoxMLUpdateMethod)(const typename Model::Element&) const;
+-  typedef HASH_MAP_NS::hash_map<String, BoxMLUpdateMethod, StringHash, StringEq> BoxMLBuilderMap;
++  typedef HASH_MAP_NS::unordered_map<String, BoxMLUpdateMethod, StringHash, StringEq> BoxMLBuilderMap;
+   static BoxMLBuilderMap boxmlMap;
+   static bool boxmlMapInitialized;
+ #endif // GMV_ENABLE_BOXML
+diff -up gtkmathview-0.8.0/src/frontend/common/TemplateLinker.hh.gcc7 gtkmathview-0.8.0/src/frontend/common/TemplateLinker.hh
+--- gtkmathview-0.8.0/src/frontend/common/TemplateLinker.hh.gcc7	2007-08-17 12:02:34.000000000 +0200
++++ gtkmathview-0.8.0/src/frontend/common/TemplateLinker.hh	2017-10-02 22:10:33.708509897 +0200
+@@ -112,8 +112,8 @@ protected:
+     }
+   };
+ 
+-  typedef HASH_MAP_NS::hash_map<ELEMENT, class Element*, typename Model::Hash> ForwardMap;
+-  typedef HASH_MAP_NS::hash_map<class Element*, ELEMENT, Element_hash> BackwardMap;
++  typedef HASH_MAP_NS::unordered_map<ELEMENT, class Element*, typename Model::Hash> ForwardMap;
++  typedef HASH_MAP_NS::unordered_map<class Element*, ELEMENT, Element_hash> BackwardMap;
+   ForwardMap forwardMap;
+   BackwardMap backwardMap;
+ };
+diff -up gtkmathview-0.8.0/gtkmathview-custom-reader.pc.in.unordered-map gtkmathview-0.8.0/gtkmathview-custom-reader.pc.in
+--- gtkmathview-0.8.0/gtkmathview-custom-reader.pc.in.unordered-map	2007-10-15 09:12:23.000000000 +0200
++++ gtkmathview-0.8.0/gtkmathview-custom-reader.pc.in	2017-10-14 22:27:07.525500726 +0200
+@@ -11,5 +11,5 @@ Description: A GTK+ Widget for Rendering
+ Version: @VERSION@
+ Requires: glib-2.0 gtk+-2.0 mathview-core mathview-backend-gtk mathview-frontend-custom-reader
+ Libs: -L${libdir} -lgtkmathview_custom_reader @T1_LIBS@
+-Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
+diff -up gtkmathview-0.8.0/gtkmathview-gmetadom.pc.in.unordered-map gtkmathview-0.8.0/gtkmathview-gmetadom.pc.in
+--- gtkmathview-0.8.0/gtkmathview-gmetadom.pc.in.unordered-map	2007-10-15 09:12:20.000000000 +0200
++++ gtkmathview-0.8.0/gtkmathview-gmetadom.pc.in	2017-10-14 22:27:07.541500646 +0200
+@@ -11,5 +11,5 @@ Description: A GTK+ Widget for Rendering
+ Version: @VERSION@
+ Requires: glib-2.0 gtk+-2.0 gdome2-cpp-smart mathview-core mathview-backend-gtk mathview-frontend-gmetadom
+ Libs: @DOM_LIBS@ -L${libdir} -lgtkmathview_gmetadom @T1_LIBS@
+-Cflags: @DOM_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: @DOM_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
+diff -up gtkmathview-0.8.0/gtkmathview-libxml2.pc.in.unordered-map gtkmathview-0.8.0/gtkmathview-libxml2.pc.in
+--- gtkmathview-0.8.0/gtkmathview-libxml2.pc.in.unordered-map	2007-10-15 09:12:29.000000000 +0200
++++ gtkmathview-0.8.0/gtkmathview-libxml2.pc.in	2017-10-14 22:27:07.556500570 +0200
+@@ -11,5 +11,5 @@ Description: A GTK+ Widget for Rendering
+ Version: @VERSION@
+ Requires: glib-2.0 gtk+-2.0 mathview-core mathview-backend-gtk mathview-frontend-libxml2
+ Libs: @XML_LIBS@ -L${libdir} -lgtkmathview_libxml2 @T1_LIBS@
+-Cflags: @XML_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: @XML_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
+diff -up gtkmathview-0.8.0/gtkmathview-libxml2-reader.pc.in.unordered-map gtkmathview-0.8.0/gtkmathview-libxml2-reader.pc.in
+--- gtkmathview-0.8.0/gtkmathview-libxml2-reader.pc.in.unordered-map	2007-10-15 09:12:26.000000000 +0200
++++ gtkmathview-0.8.0/gtkmathview-libxml2-reader.pc.in	2017-10-14 22:27:07.572500490 +0200
+@@ -11,5 +11,5 @@ Description: A GTK+ Widget for Rendering
+ Version: @VERSION@
+ Requires: glib-2.0 gtk+-2.0 mathview-core mathmlview-backend-gtk mathview-frontend-libxml2-reader
+ Libs: @XML_LIBS@ -L${libdir} -lgtkmathview_libxml2_reader @T1_LIBS@
+-Cflags: @XML_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: @XML_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
+diff -up gtkmathview-0.8.0/mathview-backend-gtk.pc.in.unordered-map gtkmathview-0.8.0/mathview-backend-gtk.pc.in
+--- gtkmathview-0.8.0/mathview-backend-gtk.pc.in.unordered-map	2007-10-15 09:12:32.000000000 +0200
++++ gtkmathview-0.8.0/mathview-backend-gtk.pc.in	2017-10-14 22:27:07.588500410 +0200
+@@ -11,4 +11,4 @@ Description: MathML rendering engine (GT
+ Version: @VERSION@
+ Requires: glib-2.0 mathview-core
+ Libs: -L${libdir} -lmathview_backend_gtk
+-Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+diff -up gtkmathview-0.8.0/mathview-backend-ps.pc.in.unordered-map gtkmathview-0.8.0/mathview-backend-ps.pc.in
+--- gtkmathview-0.8.0/mathview-backend-ps.pc.in.unordered-map	2007-10-15 09:12:35.000000000 +0200
++++ gtkmathview-0.8.0/mathview-backend-ps.pc.in	2017-10-14 22:27:07.604500329 +0200
+@@ -11,4 +11,4 @@ Description: MathML rendering engine (Po
+ Version: @VERSION@
+ Requires: glib-2.0 mathview-core
+ Libs: -L${libdir} -lmathview_backend_ps
+-Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+diff -up gtkmathview-0.8.0/mathview-backend-svg.pc.in.unordered-map gtkmathview-0.8.0/mathview-backend-svg.pc.in
+--- gtkmathview-0.8.0/mathview-backend-svg.pc.in.unordered-map	2007-10-15 09:12:39.000000000 +0200
++++ gtkmathview-0.8.0/mathview-backend-svg.pc.in	2017-10-14 22:27:07.620500249 +0200
+@@ -11,4 +11,4 @@ Description: MathML rendering engine (SV
+ Version: @VERSION@
+ Requires: glib-2.0 mathview-core
+ Libs: -L${libdir} -lmathview_backend_svg
+-Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+diff -up gtkmathview-0.8.0/mathview-core.pc.in.unordered-map gtkmathview-0.8.0/mathview-core.pc.in
+--- gtkmathview-0.8.0/mathview-core.pc.in.unordered-map	2007-10-15 09:12:17.000000000 +0200
++++ gtkmathview-0.8.0/mathview-core.pc.in	2017-10-14 22:27:07.649500103 +0200
+@@ -11,5 +11,5 @@ Description: MathML rendering engine (co
+ Version: @VERSION@
+ Requires: glib-2.0
+ Libs: -L${libdir} -lmathview @T1_LIBS@
+-Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
+diff -up gtkmathview-0.8.0/mathview-frontend-custom-reader.pc.in.unordered-map gtkmathview-0.8.0/mathview-frontend-custom-reader.pc.in
+--- gtkmathview-0.8.0/mathview-frontend-custom-reader.pc.in.unordered-map	2007-10-15 09:12:42.000000000 +0200
++++ gtkmathview-0.8.0/mathview-frontend-custom-reader.pc.in	2017-10-14 22:27:07.665500023 +0200
+@@ -11,5 +11,5 @@ Description: MathML rendering engine (cu
+ Version: @VERSION@
+ Requires: glib-2.0 mathview-core
+ Libs: -L${libdir} -lmathview_frontend_custom_reader
+-Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
+diff -up gtkmathview-0.8.0/mathview-frontend-gmetadom.pc.in.unordered-map gtkmathview-0.8.0/mathview-frontend-gmetadom.pc.in
+--- gtkmathview-0.8.0/mathview-frontend-gmetadom.pc.in.unordered-map	2007-10-15 09:12:44.000000000 +0200
++++ gtkmathview-0.8.0/mathview-frontend-gmetadom.pc.in	2017-10-14 22:27:07.680499947 +0200
+@@ -11,5 +11,5 @@ Description: MathML rendering engine (GM
+ Version: @VERSION@
+ Requires: glib-2.0 gdome2-cpp-smart mathview-core
+ Libs: @DOM_LIBS@ -L${libdir} -lmathview_frontend_gmetadom
+-Cflags: @DOM_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: @DOM_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
+diff -up gtkmathview-0.8.0/mathview-frontend-libxml2.pc.in.unordered-map gtkmathview-0.8.0/mathview-frontend-libxml2.pc.in
+--- gtkmathview-0.8.0/mathview-frontend-libxml2.pc.in.unordered-map	2007-10-15 09:12:53.000000000 +0200
++++ gtkmathview-0.8.0/mathview-frontend-libxml2.pc.in	2017-10-14 22:27:07.697499861 +0200
+@@ -11,5 +11,5 @@ Description: MathML rendering engine (li
+ Version: @VERSION@
+ Requires: glib-2.0 libxml-2.0 mathview-core
+ Libs: @XML_LIBS@ -L${libdir} -lmathview_frontend_libxml2
+-Cflags: @XML_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: @XML_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
+diff -up gtkmathview-0.8.0/mathview-frontend-libxml2-reader.pc.in.unordered-map gtkmathview-0.8.0/mathview-frontend-libxml2-reader.pc.in
+--- gtkmathview-0.8.0/mathview-frontend-libxml2-reader.pc.in.unordered-map	2007-10-15 09:12:47.000000000 +0200
++++ gtkmathview-0.8.0/mathview-frontend-libxml2-reader.pc.in	2017-10-14 22:27:07.713499781 +0200
+@@ -11,5 +11,5 @@ Description: MathML rendering engine (li
+ Version: @VERSION@
+ Requires: glib-2.0 libxml-2.0 mathview-core
+ Libs: @XML_LIBS@ -L${libdir} -lmathview_frontend_libxml2_reader
+-Cflags: @XML_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
++Cflags: @XML_CFLAGS@ -I${includedir}/@PACKAGE@ @GMV_ENABLE_BOXML_CFLAGS@ @GMV_HAVE_UNORDERED_MAP_CFLAGS@ @GMV_HAVE_HASH_MAP_CFLAGS@ @GMV_HAVE_EXT_HASH_MAP_CFLAGS@
+ 
