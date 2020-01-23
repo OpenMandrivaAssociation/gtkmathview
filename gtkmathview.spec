@@ -16,8 +16,15 @@ Patch1: gtkmathview-0.8.0-gcc43.patch
 Patch2: gtkmathview-0.8.0-gcc44.patch
 Patch3: gtkmathview-0.8.0-fix-link.patch
 Patch4: gtkmathview-0.8.0-no-static.patch
-Patch5: gtkmathview-0.8.0-gcc47.patch
-Patch6: gtkmathview-0.8.0-gcc7.patch
+# Fixes from git, via fedora
+Patch5: gtkmathview-marshalling-functions-git7d938a.patch
+Patch6: gtkmathview-gcc-fixes-git3918e8.patch
+Patch7: gtkmathview-fix-ComputerModernShaper-git210206.patch
+Patch8: gtkmathview-lowercasegreek-gitb03152.patch
+# Fix build with gcc 4.7.x, from fedora
+Patch9: gtkmathview-0.8.0-gcc47.patch
+Patch10: gtkmathview-0.8.0-am-1.13.patch
+Patch11: gtkmathview-0.8.0-gcc7.patch
 
 BuildRequires:	xsltproc
 BuildRequires:	t1lib-devel
@@ -53,8 +60,13 @@ GtkMathView is a GTK Widget for rendering MathML documents.
 %patch2 -p0
 %patch3 -p0
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
+%patch5 -p1 -b .git7d938a
+%patch6 -p1 -b .git3918e8
+%patch7 -p1 -b .git210206
+%patch8 -p1 -b .gitb03152
+%patch9 -p1 -b .gcc47
+%patch10 -p1 -b .am
+%patch11 -p1 -b .gcc7
 
 # AM_BINRELOC missing, just ignore
 echo 'AC_DEFUN([AM_BINRELOC], [])' > acinclude.m4
