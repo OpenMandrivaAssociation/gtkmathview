@@ -60,6 +60,8 @@ GtkMathView is a GTK Widget for rendering MathML documents.
 echo 'AC_DEFUN([AM_BINRELOC], [])' > acinclude.m4
 
 %build
+export CC=gcc
+export CXX=g++
 autoreconf -fi
 %configure \
 	--disable-static
