@@ -5,7 +5,7 @@
 Summary:	C++ rendering engine for MathML documents
 Name:		gtkmathview
 Version:	0.8.0
-Release:	7
+Release:	8
 License:	GPLv3+
 Group:		Networking/WWW
 Url:		http://www.cs.unibo.it/helm/mml-widget/
@@ -17,6 +17,7 @@ Patch2: gtkmathview-0.8.0-gcc44.patch
 Patch3: gtkmathview-0.8.0-fix-link.patch
 Patch4: gtkmathview-0.8.0-no-static.patch
 Patch5: gtkmathview-0.8.0-gcc47.patch
+Patch6: gtkmathview-0.8.0-gcc7.patch
 
 BuildRequires:	xsltproc
 BuildRequires:	t1lib-devel
@@ -53,12 +54,14 @@ GtkMathView is a GTK Widget for rendering MathML documents.
 %patch3 -p0
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
+
 # AM_BINRELOC missing, just ignore
 echo 'AC_DEFUN([AM_BINRELOC], [])' > acinclude.m4
 
 %build
 autoreconf -fi
-%configure2_5x \
+%configure \
 	--disable-static
 
 make
@@ -70,7 +73,7 @@ tar xjf %{SOURCE1}
 cd ../../..
 
 %install
-%makeinstall_std
+%make_install
 mkdir -p %{buildroot}/%_docdir/%{name}
 cp -r DATA.TMP/%{name}.html %{buildroot}/%_docdir/%{name}
 
@@ -122,7 +125,7 @@ cp -r DATA.TMP/%{name}.html %{buildroot}/%_docdir/%{name}
 + Revision: 109226
 - rebuild for new lzma
 
-* Tue Oct 30 2007 Jérôme Soyer <saispo@mandriva.org> 0.8.0-1mdv2008.1
+* Tue Oct 30 2007 JÃ©rÃ´me Soyer <saispo@mandriva.org> 0.8.0-1mdv2008.1
 + Revision: 103829
 - New release
 
@@ -131,7 +134,7 @@ cp -r DATA.TMP/%{name}.html %{buildroot}/%_docdir/%{name}
 - New version
   Build against t1lib again
 
-  + Jérôme Soyer <saispo@mandriva.org>
+  + JÃ©rÃ´me Soyer <saispo@mandriva.org>
     - Import gtkmathview
 
 
@@ -145,13 +148,13 @@ cp -r DATA.TMP/%{name}.html %{buildroot}/%_docdir/%{name}
 * Fri Jul 21 2006 Charles A Edwards <eslrahc@mandriva.org> 0.7.5-6mdv2007.0
 - rebuild
 
-* Mon Jan 16 2006 G�tz Waschk <waschk@mandriva.org> 0.7.5-5mdk
+* Mon Jan 16 2006 Götz Waschk <waschk@mandriva.org> 0.7.5-5mdk
 - fix buildrequires
 
-* Sun Jan 15 2006 G�tz Waschk <waschk@mandriva.org> 0.7.5-4mdk
+* Sun Jan 15 2006 Götz Waschk <waschk@mandriva.org> 0.7.5-4mdk
 - update build deps
 
-* Mon Jan  2 2006 G�tz Waschk <waschk@mandriva.org> 0.7.5-3mdk
+* Mon Jan  2 2006 Götz Waschk <waschk@mandriva.org> 0.7.5-3mdk
 - fix buildrequires
 
 * Sat Nov 26 2005 Marcel Pol <mpol@mandriva.org> 0.7.5-2mdk
@@ -164,22 +167,22 @@ cp -r DATA.TMP/%{name}.html %{buildroot}/%_docdir/%{name}
 * Wed Sep 28 2005 Marcel Pol <mpol@mandriva.org> 0.7.4-2mdk
 - require fonts-ttf-latex
 
-* Mon Sep 12 2005 G�tz Waschk <waschk@mandriva.org> 0.7.4-1mdk
+* Mon Sep 12 2005 Götz Waschk <waschk@mandriva.org> 0.7.4-1mdk
 - fix buildrequires
 - New release 0.7.4
 
-* Mon Aug 15 2005 G�tz Waschk <waschk@mandriva.org> 0.7.3-1mdk
+* Mon Aug 15 2005 Götz Waschk <waschk@mandriva.org> 0.7.3-1mdk
 - fix file list
 - fix buildrequires
 - 0.7.3
 
-* Mon May  9 2005 G�tz Waschk <waschk@mandriva.org> 0.4.3-4mdk
+* Mon May  9 2005 Götz Waschk <waschk@mandriva.org> 0.4.3-4mdk
 - multiarch
 
 * Tue Jan 10 2005 Charles A Edwards <eslrahc@bellsouth.net> 0.4.3-3mdk
 - rebuild without t1lib (build fails if latest is used)
 
-* Fri Jun 11 2004 G�tz Waschk <waschk@linux-mandrake.com> 0.4.3-2mdk
+* Fri Jun 11 2004 Götz Waschk <waschk@linux-mandrake.com> 0.4.3-2mdk
 - spec cleanup
 - fix deps
 - patch for new g++
@@ -191,7 +194,7 @@ cp -r DATA.TMP/%{name}.html %{buildroot}/%_docdir/%{name}
 - Requires/BuildRequires
 - rm Info Post/Postrun (info dropped in 0.4.2)
 
-* Tue Jul  8 2003 G�tz Waschk <waschk@linux-mandrake.com> 0.4.2-2mdk
+* Tue Jul  8 2003 Götz Waschk <waschk@linux-mandrake.com> 0.4.2-2mdk
 - fix directory ownership
 
 * Tue Jun 10 2003 Charles A Edwards <eslrahc@bellsouth.net> 0.4.2-1mdk
@@ -200,9 +203,9 @@ cp -r DATA.TMP/%{name}.html %{buildroot}/%_docdir/%{name}
 - add gtkmathview.pc
 - BuildRequires/Requires gmetadom-devel>= 0.1.8
 
-* Mon Jun  9 2003 G�tz Waschk <waschk@linux-mandrake.com> 0.4.1-2mdk
+* Mon Jun  9 2003 Götz Waschk <waschk@linux-mandrake.com> 0.4.1-2mdk
 - move the config script to the devel package
 
-* Sun May  4 2003 G�tz Waschk <waschk@linux-mandrake.com> 0.4.1-1mdk
+* Sun May  4 2003 Götz Waschk <waschk@linux-mandrake.com> 0.4.1-1mdk
 - from Charles A Edwards <eslrahc@bellsouth.net>:
   - initial Mdk release 
