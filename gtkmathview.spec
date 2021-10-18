@@ -5,7 +5,7 @@
 Summary:	C++ rendering engine for MathML documents
 Name:		gtkmathview
 Version:	0.8.0
-Release:	8
+Release:	9
 License:	GPLv3+
 Group:		Networking/WWW
 Url:		http://www.cs.unibo.it/helm/mml-widget/
