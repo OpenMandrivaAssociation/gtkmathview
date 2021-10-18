@@ -9,7 +9,7 @@ Release:	9
 License:	GPLv3+
 Group:		Networking/WWW
 Url:		http://www.cs.unibo.it/helm/mml-widget/
-Source0:	http://helm.cs.unibo.it/mml-widget/sources/%{name}-%{version}.tar.bz2
+Source0:	http://helm.cs.unibo.it/mml-widget/sources/%{name}-%{version}.tar.gz
 Source1:	gtkmathview.html.tar.bz2
 Patch0: gtkmathview-0.8.0-cond-t1.patch
 Patch1: gtkmathview-0.8.0-gcc43.patch
