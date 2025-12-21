@@ -26,6 +26,11 @@ Patch9: gtkmathview-0.8.0-gcc47.patch
 Patch10: gtkmathview-0.8.0-am-1.13.patch
 Patch11: gtkmathview-0.8.0-gcc7.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	xsltproc
 BuildRequires:	t1lib-devel
 BuildRequires:	popt-devel
