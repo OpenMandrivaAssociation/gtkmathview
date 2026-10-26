@@ -1,3 +1,7 @@
+# The LTO configure workaround rewrites this ancient libtool script into a
+# command that starts with -e, so the shared library is never produced.
+%global _disable_lto 1
+
 %define major 0
 %define libname  %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
@@ -83,7 +87,7 @@ autoreconf -fi
 %configure \
 	--disable-static
 
-make
+make LIBTOOL=slibtool-shared
 
 ##Add updated html reference manual##
 mkdir DATA.TMP
@@ -92,7 +96,7 @@ tar xjf %{SOURCE1}
 cd ../../..
 
 %install
-%make_install
+%make_install LIBTOOL=slibtool-shared
 mkdir -p %{buildroot}/%_docdir/%{name}
 cp -r DATA.TMP/%{name}.html %{buildroot}/%_docdir/%{name}
 
