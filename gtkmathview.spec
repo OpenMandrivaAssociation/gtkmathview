@@ -60,18 +60,18 @@ GtkMathView is a GTK Widget for rendering MathML documents.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p0
-%patch3 -p0
-%patch4 -p1
-%patch5 -p1 -b .git7d938a
-%patch6 -p1 -b .git3918e8
-%patch7 -p1 -b .git210206
-%patch8 -p1 -b .gitb03152
-%patch9 -p1 -b .gcc47
-%patch10 -p1 -b .am
-%patch11 -p1 -b .gcc7
+%patch 0 -p1
+%patch 1 -p1
+%patch 2 -p0
+%patch 3 -p0
+%patch 4 -p1
+%patch 5 -p1 -b .git7d938a
+%patch 6 -p1 -b .git3918e8
+%patch 7 -p1 -b .git210206
+%patch 8 -p1 -b .gitb03152
+%patch 9 -p1 -b .gcc47
+%patch 10 -p1 -b .am
+%patch 11 -p1 -b .gcc7
 
 # AM_BINRELOC missing, just ignore
 echo 'AC_DEFUN([AM_BINRELOC], [])' > acinclude.m4
